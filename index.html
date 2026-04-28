@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPIDJB Stock Viewer - VS Code Extension</title>
+  <meta name="description" content="Real-time SPARINDEX fund price tracking directly in VS Code status bar">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f9fafb;
+    }
+
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2em;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 60px;
+    }
+
+    .hero h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #1f2937;
+    }
+
+    .hero ul {
+      list-style: none;
+      margin: 20px 0;
+    }
+
+    .hero li {
+      padding: 10px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .hero li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1em;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4f6;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin: 60px 0;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .feature-card h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 1.3em;
+    }
+
+    .feature-card p {
+      color: #6b7280;
+      line-height: 1.8;
+    }
+
+    .settings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .settings-table th,
+    .settings-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .settings-table th {
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+    }
+
+    .settings-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-block {
+      background: #1f2937;
+      color: #e5e7eb;
+      padding: 20px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 20px 0;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.9em;
+    }
+
+    footer {
+      background: #1f2937;
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 60px;
+    }
+
+    footer p {
+      margin: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2em;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        display: block;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SPIDJB Stock Viewer</h1>
+    <p>Real-time SPARINDEX fund price tracking in VS Code</p>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <div>
+        <h2>Track SPIDJB in Real-Time</h2>
+        <p>Monitor the SPARINDEX INDEX DJ BIN CL WLD fund directly from your VS Code status bar. Get instant price updates, color-coded changes, and smart notifications — all without leaving your IDE.</p>
+        <ul>
+          <li>Live price display with daily change</li>
+          <li>Color-coded indicators (green/red)</li>
+          <li>Auto-refresh on configurable interval</li>
+          <li>Detailed information panel</li>
+          <li>Smart price change alerts</li>
+          <li>Nordnet.dk integration</li>
+        </ul>
+        <div class="cta-buttons">
+          <a href="https://marketplace.visualstudio.com" class="btn btn-primary">Install from Marketplace</a>
+          <a href="https://github.com/Allanrhmn/DSJIWORLD" class="btn btn-secondary">View on GitHub</a>
+        </div>
+      </div>
+      <div style="text-align: center;">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23667eea' opacity='0.1' rx='10'/%3E%3Ctext x='50%25' y='50%25' font-size='60' font-weight='bold' fill='%23667eea' text-anchor='middle' dominant-baseline='middle'%3E📈%3C/text%3E%3C/svg%3E" alt="Stock chart icon">
+      </div>
+    </section>
+
+    <h2 style="text-align: center; margin: 60px 0 30px; font-size: 2em; color: #1f2937;">Features</h2>
+    <div class="features">
+      <div class="feature-card">
+        <h3>🎯 Status Bar Integration</h3>
+        <p>See current price and daily change right in VS Code's status bar. Click to open detailed view.</p>
+      </div>
+      <div class="feature-card">
+        <h3>⏱️ Auto-Refresh</h3>
+        <p>Configurable refresh interval (1-1440 minutes). Default is 5 minutes for balanced updates.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🎨 Color-Coded Display</h3>
+        <p>Green for gains, red for losses. Instantly understand market sentiment at a glance.</p>
+      </div>
+      <div class="feature-card">
+        <h3>📊 Details Panel</h3>
+        <p>Click status bar item to see full fund information, timestamp, and direct Nordnet link.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🔔 Smart Alerts</h3>
+        <p>Optional notifications when price moves exceed your custom threshold percentage.</p>
+      </div>
+      <div class="feature-card">
+        <h3>⚙️ Full Configuration</h3>
+        <p>Customize everything via VS Code settings. All preferences persist between sessions.</p>
+      </div>
+    </div>
+
+    <h2 style="margin-top: 60px; color: #1f2937;">Configuration</h2>
+    <p>Customize the extension in VS Code Settings (Ctrl+,):</p>
+    <table class="settings-table">
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>spidjb.refreshInterval</code></td>
+          <td>number</td>
+          <td>5</td>
+          <td>Refresh interval in minutes (1-1440)</td>
+        </tr>
+        <tr>
+          <td><code>spidjb.showInStatusBar</code></td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>Show price in status bar</td>
+        </tr>
+        <tr>
+          <td><code>spidjb.alertThreshold</code></td>
+          <td>number</td>
+          <td>0</td>
+          <td>Alert when change exceeds % (0 = disabled)</td>
+        </tr>
+        <tr>
+          <td><code>spidjb.statusBarPosition</code></td>
+          <td>string</td>
+          <td>right</td>
+          <td>Position: "left" or "right"</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 style="margin-top: 60px; color: #1f2937;">Example Configuration</h2>
+    <div class="code-block">{
+  "spidjb.refreshInterval": 3,
+  "spidjb.showInStatusBar": true,
+  "spidjb.alertThreshold": 1.5,
+  "spidjb.statusBarPosition": "right"
+}</div>
+
+    <h2 style="margin-top: 60px; color: #1f2937;">Commands</h2>
+    <div class="features" style="margin-bottom: 40px;">
+      <div class="feature-card">
+        <h3>Refresh Price</h3>
+        <p><code>spidjb.refresh</code></p>
+        <p>Manually trigger a price data refresh</p>
+      </div>
+      <div class="feature-card">
+        <h3>Open Details</h3>
+        <p><code>spidjb.openPanel</code></p>
+        <p>Show the full details panel</p>
+      </div>
+      <div class="feature-card">
+        <h3>Open on Nordnet</h3>
+        <p><code>spidjb.openNordnet</code></p>
+        <p>Open fund page in browser</p>
+      </div>
+      <div class="feature-card">
+        <h3>Toggle Status Bar</h3>
+        <p><code>spidjb.toggleStatusBar</code></p>
+        <p>Show or hide status bar item</p>
+      </div>
+    </div>
+
+    <h2 style="margin-top: 60px; color: #1f2937;">Fund Information</h2>
+    <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+      <p><strong>Fund:</strong> SPARINDEX INDEX DJ BIN CL WLD</p>
+      <p><strong>Ticker:</strong> SPIDJB</p>
+      <p><strong>Exchange:</strong> XCSE (Copenhagen Stock Exchange)</p>
+      <p><strong>Data Source:</strong> Nordnet.dk</p>
+      <p style="margin-top: 15px; color: #6b7280;"><em>Price data is fetched directly from Nordnet's fund listing page and updated on your configured refresh interval.</em></p>
+    </div>
+
+    <h2 style="margin-top: 60px; color: #1f2937;">Troubleshooting</h2>
+    <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+      <h3 style="color: #667eea; margin-bottom: 15px;">Price Not Updating?</h3>
+      <ul style="margin-left: 20px; margin-bottom: 20px;">
+        <li>Check VS Code Output channel: "SPIDJB Stock Viewer"</li>
+        <li>Verify your internet connection</li>
+        <li>Try manually refreshing: <code>SPIDJB: Refresh Price</code></li>
+        <li>Restart VS Code</li>
+      </ul>
+
+      <h3 style="color: #667eea; margin-bottom: 15px;">Wrong Price Data?</h3>
+      <ul style="margin-left: 20px; margin-bottom: 20px;">
+        <li>The extension parses Nordnet's page structure</li>
+        <li>If the page layout changes, parsing may fail</li>
+        <li><a href="https://github.com/Allanrhmn/DSJIWORLD/issues" style="color: #667eea;">Report issues on GitHub</a></li>
+      </ul>
+
+      <h3 style="color: #667eea; margin-bottom: 15px;">Alerts Not Working?</h3>
+      <ul style="margin-left: 20px;">
+        <li>Ensure <code>spidjb.alertThreshold</code> is greater than 0</li>
+        <li>Set it to your desired percentage threshold (e.g., 1.5 for ±1.5%)</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>SPIDJB Stock Viewer</strong></p>
+    <p>Real-time SPARINDEX fund price tracking for VS Code</p>
+    <p style="margin-top: 20px;">
+      <a href="https://github.com/Allanrhmn/DSJIWORLD" style="color: #667eea; text-decoration: none; margin: 0 15px;">GitHub</a>
+      <a href="https://github.com/Allanrhmn/DSJIWORLD/issues" style="color: #667eea; text-decoration: none; margin: 0 15px;">Issues</a>
+      <a href="https://github.com/Allanrhmn/DSJIWORLD/blob/main/README.md" style="color: #667eea; text-decoration: none; margin: 0 15px;">Docs</a>
+    </p>
+    <p style="margin-top: 20px; color: #9ca3af;">Made with ❤️ for developers who invest</p>
+  </footer>
+</body>
+</html>
