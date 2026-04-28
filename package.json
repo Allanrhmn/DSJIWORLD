@@ -1,0 +1,95 @@
+{
+  "name": "spidjb-stock-viewer",
+  "displayName": "SPIDJB Stock Viewer",
+  "description": "Real-time SPARINDEX fund price tracking in VS Code status bar",
+  "version": "1.0.0",
+  "publisher": "AllanRhman",
+  "icon": "assets/icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "spidjb.refresh",
+        "title": "SPIDJB: Refresh Price"
+      },
+      {
+        "command": "spidjb.openPanel",
+        "title": "SPIDJB: Open Details"
+      },
+      {
+        "command": "spidjb.openNordnet",
+        "title": "SPIDJB: Open on Nordnet"
+      },
+      {
+        "command": "spidjb.toggleStatusBar",
+        "title": "SPIDJB: Toggle Status Bar"
+      }
+    ],
+    "configuration": {
+      "title": "SPIDJB Stock Viewer",
+      "properties": {
+        "spidjb.refreshInterval": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 1440,
+          "description": "Price refresh interval in minutes"
+        },
+        "spidjb.showInStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show price in status bar"
+        },
+        "spidjb.alertThreshold": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "description": "Alert notification threshold in percentage (0 = disabled)"
+        },
+        "spidjb.statusBarPosition": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right"
+          ],
+          "default": "right",
+          "description": "Status bar item position"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.x",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vscode/test-electron": "^2.3.0",
+    "esbuild": "^0.19.0",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12"
+  }
+}
